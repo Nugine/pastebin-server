@@ -15,3 +15,4 @@ env_logger = "0.6.2"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 short-crypt = "1.0.8"
+actix-web = "1.0"
