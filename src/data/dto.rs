@@ -25,7 +25,7 @@ pub struct FindRecordRes<'a> {
     pub view_count: u64,
 }
 
-#[derive(Serialize)]
+#[derive(Serialize, Debug)]
 pub struct ErrRes<'a> {
     pub code: i32,
     pub message: &'a str,

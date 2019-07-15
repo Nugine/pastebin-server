@@ -1,3 +1,4 @@
+use super::error::HandlerError;
 use super::state::State;
 use crate::data::dto::{ErrRes, SaveRecordReq, SaveRecordRes};
 use crate::data::key::nano_to_key;
@@ -5,12 +6,12 @@ use crate::data::record::Record;
 use crate::env::MAX_EXPIRATION;
 use crate::store::time::{nano_to_sec, now_nano, sec_to_nano};
 
-use actix_web::{web, HttpResponse};
+use actix_web::{web, HttpResponse, Result};
 
 // path: /record
-pub fn save_record(state: web::Data<State>, dto: web::Json<SaveRecordReq>) -> HttpResponse {
+pub fn save_record(state: web::Data<State>, dto: web::Json<SaveRecordReq>) -> Result<HttpResponse> {
     if dto.expiration > *MAX_EXPIRATION {
-        return HttpResponse::BadRequest().json(ErrRes::too_long_expiration());
+        return Err(HandlerError::bad_request(ErrRes::too_long_expiration()).into());
     }
 
     let now = now_nano();
@@ -35,5 +36,5 @@ pub fn save_record(state: web::Data<State>, dto: web::Json<SaveRecordReq>) -> Ht
 
     info!("SAVE key = {}, store_size = {}", key, store_size);
 
-    HttpResponse::Ok().json(SaveRecordRes { key: &key })
+    Ok(HttpResponse::Ok().json(SaveRecordRes { key: &key }))
 }

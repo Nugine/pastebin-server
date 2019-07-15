@@ -29,7 +29,7 @@ const DEFAULT_CRYPT_KEY:&'static str = "magic";
 
 lazy_static! {
     pub static ref MAX_STORE_SIZE: usize = { parse("PASTEBIN_MAX_STORE_SIZE", 100 * 1024 * 1024) };
-    pub static ref MAX_POST_SIZE: u64 = { parse("PASTEBIN_MAX_POST_SIZE", 32 * 1024) };
+    pub static ref MAX_POST_SIZE: usize = { parse("PASTEBIN_MAX_POST_SIZE", 32 * 1024) };
     pub static ref MAX_EXPIRATION: SecTime = { parse("PASTEBIN_MAX_EXPIRATION", 7 * 24 * 60 * 60) };
     pub static ref CLEAN_DURATION: u64 = { parse("PASTEBIN_CLEAN_DURATION", 5000) };
     pub static ref INIT_CAPACITY: usize = { parse("PASTEBIN_INIT_CAPACITY", 4 * 1024) };

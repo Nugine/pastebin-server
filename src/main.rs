@@ -10,13 +10,13 @@ extern crate lazy_static;
 extern crate log;
 
 use crate::env::{info_env, ADDR, CLEAN_DURATION, INIT_CAPACITY, MAX_STORE_SIZE};
-use crate::handler::{find_record, save_record, State, StoreLock};
+use crate::handler::{find_record_resource, save_record_resource, State, StoreLock};
 use crate::store::time::now_nano;
 
 use std::thread;
 use std::time::Duration;
 
-use actix_web::{web, App, HttpServer};
+use actix_web::{App, HttpServer};
 use dotenv::dotenv;
 
 fn start_gc(store_lock: StoreLock) {
@@ -52,8 +52,8 @@ fn run_server(state: State) -> std::io::Result<()> {
     HttpServer::new(move || {
         App::new()
             .data(state.clone())
-            .route("/record", web::post().to(save_record))
-            .route("/record/{key}", web::get().to(find_record))
+            .service(find_record_resource())
+            .service(save_record_resource())
     })
     .workers(1)
     .bind(&*ADDR)?
