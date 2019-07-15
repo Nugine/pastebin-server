@@ -1,7 +1,19 @@
+mod env;
 mod store;
 mod util;
 
+#[macro_use]
+extern crate lazy_static;
+#[macro_use]
+extern crate log;
+
+use dotenv::dotenv;
+
+use crate::env::info_env;
+
 fn main() {
-    or_return!(None, ());
+    dotenv().ok();
+    env_logger::init();
+    info_env();
     println!("Hello, world!");
 }
