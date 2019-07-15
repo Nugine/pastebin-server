@@ -36,21 +36,24 @@ macro_rules! define_err_res {
         impl<'a> ErrRes<'a> {
             #[inline]
             pub fn $method() -> Self {
-                ErrRes { code: $code,message: $msg,}
+                ErrRes {
+                    code: $code,
+                    message: $msg,
+                }
             }
         }
     };
 }
 
-define_err_res!(bad_key,1001,"Can not parse key");
-define_err_res!(record_not_found,1002,"Can not find record");
-define_err_res!(too_long_expiration,1003,"Too long expiration");
-define_err_res!(too_long_content,1004,"Too long content");
+define_err_res!(bad_key, 1001, "Can not parse key");
+define_err_res!(record_not_found, 1002, "Can not find record");
+define_err_res!(too_long_expiration, 1003, "Too long expiration");
+define_err_res!(too_long_content, 1004, "Too long content");
 
 #[cfg(test)]
 #[test]
 fn test_err_res() {
-    let p = |err:ErrRes|{println!("{}",serde_json::to_string(&err).unwrap())};
+    let p = |err: ErrRes| println!("{}", serde_json::to_string(&err).unwrap());
     p(ErrRes::bad_key());
     p(ErrRes::record_not_found());
     p(ErrRes::too_long_expiration());

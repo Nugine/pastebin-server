@@ -1,5 +1,5 @@
-use crate::util::lru_hash_map::LruValueSize;
 use crate::store::time::SecTime;
+use crate::util::lru_hash_map::LruValueSize;
 
 #[derive(Debug)]
 pub struct Record {

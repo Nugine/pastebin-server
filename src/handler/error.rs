@@ -3,8 +3,8 @@ use crate::data::dto::ErrRes;
 use std::fmt::Display;
 
 use actix_web::error::ResponseError;
-use actix_web::{ HttpResponse};
 use actix_web::http::StatusCode;
+use actix_web::HttpResponse;
 
 #[derive(Debug)]
 pub struct HandlerError<'a> {
@@ -24,18 +24,18 @@ impl<'a> ResponseError for HandlerError<'a> {
     }
 }
 
-impl<'a> HandlerError<'a>{
-    pub fn bad_request(err_res: ErrRes<'a>)->Self{
-        Self{
+impl<'a> HandlerError<'a> {
+    pub fn bad_request(err_res: ErrRes<'a>) -> Self {
+        Self {
             status_code: StatusCode::BAD_REQUEST,
-            err_res
+            err_res,
         }
     }
 
-    pub fn not_found(err_res: ErrRes<'a>)->Self{
-        Self{
+    pub fn not_found(err_res: ErrRes<'a>) -> Self {
+        Self {
             status_code: StatusCode::NOT_FOUND,
-            err_res
+            err_res,
         }
     }
 }
