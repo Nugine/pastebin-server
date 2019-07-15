@@ -80,6 +80,7 @@ where
     }
 }
 
+#[cfg(test)]
 #[test]
 fn test_store() {
     #[derive(Debug, PartialEq, Eq)]
