@@ -1,6 +1,7 @@
 mod env;
 mod store;
 mod util;
+mod data;
 
 #[macro_use]
 extern crate lazy_static;
