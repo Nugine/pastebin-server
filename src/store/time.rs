@@ -11,6 +11,16 @@ pub fn now_nano() -> NanoTime {
         .as_nanos()
 }
 
+#[inline]
+pub fn sec_to_nano(sec:SecTime)->NanoTime{
+    (sec as NanoTime) * 1000000
+}
+
+#[inline]
+pub fn nano_to_sec(nano:NanoTime)->SecTime{
+    (nano/1000000) as SecTime
+}
+
 #[cfg(test)]
 #[test]
 fn test_now_nano() {
