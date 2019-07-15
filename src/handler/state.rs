@@ -4,9 +4,11 @@ use crate::store::time::NanoTime;
 
 use std::sync::{Arc, RwLock};
 
+pub type StoreLock = Arc<RwLock<Store<NanoTime, Record>>>;
+
 #[derive(Clone)]
 pub struct State {
-    pub store_lock: Arc<RwLock<Store<NanoTime, Record>>>,
+    pub store_lock: StoreLock,
 }
 
 impl State {
