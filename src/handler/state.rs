@@ -1,10 +1,11 @@
 use crate::data::record::Record;
-use crate::store::store::Store;
+use crate::store::store;
 use crate::store::time::NanoTime;
 
 use std::sync::{Arc, RwLock};
 
-pub type StoreLock = Arc<RwLock<Store<NanoTime, Record>>>;
+pub type Store = store::Store<NanoTime, Record>;
+pub type StoreLock = Arc<RwLock<Store>>;
 
 #[derive(Clone)]
 pub struct State {

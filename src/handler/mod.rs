@@ -5,7 +5,7 @@ mod state;
 
 use self::find_record::find_record;
 use self::save_record::save_record;
-pub use state::{State, StoreLock};
+pub use state::{State, Store, StoreLock};
 
 use crate::data::dto::{ErrRes, SaveRecordReq};
 use crate::env::MAX_POST_SIZE;

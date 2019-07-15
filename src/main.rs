@@ -10,8 +10,8 @@ extern crate lazy_static;
 extern crate log;
 
 use crate::env::{info_env, ADDR, CLEAN_DURATION, INIT_CAPACITY, MAX_STORE_SIZE};
-use crate::handler::{find_record_resource, save_record_resource, State, StoreLock};
-use crate::store::time::now_nano;
+use crate::handler::{find_record_resource, save_record_resource, State, Store, StoreLock};
+use crate::store::time::{now_nano, NanoTime};
 
 use std::thread;
 use std::time::Duration;
@@ -19,29 +19,31 @@ use std::time::Duration;
 use actix_web::{App, HttpServer};
 use dotenv::dotenv;
 
+fn gc(store: &mut Store, now: NanoTime) {
+    let before_size = store.total_value_size();
+    store.clean(now);
+    let stw_time = now_nano() - now;
+    let after_size = store.total_value_size();
+
+    info!(
+        "CLEAN stw: {} ns, store_size: {} -> {}",
+        stw_time, before_size, after_size
+    );
+}
+
 fn start_gc(store_lock: StoreLock) {
     thread::spawn(move || loop {
-        // read store
-        // assert: store_lock.read never returns Err or paincs
-        let store = store_lock.read().unwrap();
+        // write store
+        // assert: store_lock.write never returns Err or paincs
+        let mut store = store_lock.write().unwrap();
         let now = now_nano();
-        let needs_clean = store.needs_clean(now);
+        if store.needs_clean(now) {
+            gc(&mut *store, now);
+        }
 
-        // release reader lock
+        // release writer lock
         drop(store);
 
-        if needs_clean {
-            // write store
-            // assert: store_lock.write never returns Err or paincs
-            let mut store = store_lock.write().unwrap();
-
-            info!("CLEAN start: store_size = {}", store.total_value_size());
-            store.clean(now);
-            info!("CLEAN end: store_size = {}", store.total_value_size());
-
-            // release writer lock
-            drop(store);
-        }
         thread::sleep(Duration::from_millis(*CLEAN_DURATION));
     });
 }
