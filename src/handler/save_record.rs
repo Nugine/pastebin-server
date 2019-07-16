@@ -33,9 +33,13 @@ pub fn save_record(state: web::Data<State>, dto: web::Json<SaveRecordReq>) -> Re
     store.save(now, record);
 
     let store_size = store.total_value_size();
+    let item_count = store.item_count();
     let key = nano_to_key(now);
 
-    info!("SAVE key = {}, store_size = {}", key, store_size);
+    info!(
+        "SAVE key = {}, store_size = {}, item_count = {}",
+        key, store_size, item_count
+    );
 
     Ok(HttpResponse::Ok().json(SaveRecordRes { key: &key }))
 }

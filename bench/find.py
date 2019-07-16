@@ -21,3 +21,5 @@ url = url+'/'+resp['key']
 bench = f'ab -n 100000 -c 100 {url}'
 print(bench)
 os.system(bench)
+
+os.system('tail server.log')

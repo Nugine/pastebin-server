@@ -20,13 +20,15 @@ use dotenv::dotenv;
 
 fn gc(store: &mut Store, now: NanoTime) {
     let before_size = store.total_value_size();
-    store.clean(now);
+    let before_count = store.item_count();
+    let removed_count = store.clean(now);
     let stw_time = now_nano() - now;
     let after_size = store.total_value_size();
+    let after_count = store.item_count();
 
     info!(
-        "CLEAN stw: {} ns, store_size: {} -> {}",
-        stw_time, before_size, after_size
+        "CLEAN stw: {} ns, removed: {}, store_size: {} -> {}, item_count: {} -> {}",
+        stw_time, removed_count, before_size, after_size, before_count, after_count
     );
 }
 

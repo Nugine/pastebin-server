@@ -1,7 +1,7 @@
-use super::time::NanoTime;
+use super::time::{sec_to_nano, NanoTime};
 
 use std::cmp::Eq;
-use std::collections::BTreeMap;
+use std::collections::btree_map::{BTreeMap, Entry};
 use std::hash::Hash;
 
 use linked_hash_map::LinkedHashMap;
@@ -77,9 +77,20 @@ where
             }
         }
 
-        self.total_value_size+=item.size;
-        let dead_time = item.value.dead_time();
-        self.queue.insert(dead_time, key);
+        self.total_value_size += item.size;
+        let mut dead_time = item.value.dead_time();
+
+        // handle dead_time collision
+        loop {
+            let entry = self.queue.entry(dead_time);
+            if let Entry::Vacant(_) = entry {
+                entry.or_insert(key);
+                break;
+            }
+            dead_time += sec_to_nano(1);
+            info!("dead_time collision: {}", dead_time);
+        }
+
         self.map.insert(key, item);
     }
 
@@ -89,12 +100,18 @@ where
         Some(&(*item))
     }
 
-    pub fn clean(&mut self, now: NanoTime) {
+    pub fn clean(&mut self, now: NanoTime) -> usize {
         let right = self.queue.split_off(&now);
+        let count = self.queue.len();
+        let mut delta = 0;
         for (_, key) in &self.queue {
-            self.map.remove(&key);
+            if let Some(it) = self.map.remove(&key) {
+                delta += it.size;
+            }
         }
         self.queue = right;
+        self.total_value_size -= delta;
+        count
     }
 
     #[inline]
@@ -109,6 +126,11 @@ where
     #[inline]
     pub fn total_value_size(&self) -> usize {
         self.total_value_size
+    }
+
+    #[inline]
+    pub fn item_count(&self) -> usize {
+        self.map.len()
     }
 }
 

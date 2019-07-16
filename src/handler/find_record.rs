@@ -15,7 +15,6 @@ pub fn find_record(state: web::Data<State>, req: HttpRequest) -> Result<HttpResp
     // write store
     // assert: store_lock.write never returns Err or paincs
     let mut store = state.store_lock.write().unwrap();
-    let store_size = store.total_value_size();
 
     // access record
     let item = store
@@ -32,6 +31,6 @@ pub fn find_record(state: web::Data<State>, req: HttpRequest) -> Result<HttpResp
         view_count: item.access_count,
     };
 
-    info!("FIND key = {}, store_size = {}", key, store_size);
+    info!("FIND key = {}", key);
     Ok(HttpResponse::Ok().json(resp))
 }
