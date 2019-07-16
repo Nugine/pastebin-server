@@ -8,7 +8,7 @@ extern crate lazy_static;
 #[macro_use]
 extern crate log;
 
-use crate::env::{info_env, ADDR, CLEAN_DURATION, INIT_CAPACITY, MAX_STORE_SIZE};
+use crate::env::{info_env, ADDR, CLEAN_DURATION, MAX_STORE_SIZE};
 use crate::handler::{find_record_resource, save_record_resource, State, Store, StoreLock};
 use crate::store::time::{now_nano, NanoTime};
 
@@ -21,7 +21,11 @@ use dotenv::dotenv;
 fn gc(store: &mut Store, now: NanoTime) {
     let before_size = store.total_value_size();
     let before_count = store.item_count();
-    let removed_count = store.clean(now);
+    let removed_count = {
+        let cnt = store.clean(now);
+        store.shrink();
+        cnt
+    };
     let stw_time = now_nano() - now;
     let after_size = store.total_value_size();
     let after_count = store.item_count();
@@ -68,7 +72,7 @@ fn main() -> std::io::Result<()> {
     env_logger::init();
     info_env();
 
-    let state = State::new(*MAX_STORE_SIZE, *INIT_CAPACITY);
+    let state = State::new(*MAX_STORE_SIZE);
     start_gc(state.store_lock.clone());
     run_server(state)
 }

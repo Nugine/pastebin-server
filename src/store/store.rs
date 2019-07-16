@@ -55,9 +55,9 @@ where
     K: Copy + Eq + Hash,
     V: LruValueSize + WithDeadTime,
 {
-    pub fn new(max_value_size: usize, capacity: usize) -> Self {
+    pub fn new(max_value_size: usize) -> Self {
         Self {
-            map: LinkedHashMap::with_capacity(capacity),
+            map: LinkedHashMap::new(),
             queue: BTreeMap::new(),
             total_value_size: 0,
             max_value_size,
@@ -132,6 +132,11 @@ where
     pub fn item_count(&self) -> usize {
         self.map.len()
     }
+
+    #[inline]
+    pub fn shrink(&mut self) {
+        self.map.shrink_to_fit()
+    }
 }
 
 #[cfg(test)]
@@ -151,7 +156,7 @@ fn test_store() {
         }
     }
 
-    let mut store = Store::new(10, 100);
+    let mut store = Store::new(10);
     assert_eq!(store.access(1), None);
 
     for i in 0..20 {

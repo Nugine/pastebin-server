@@ -12,9 +12,9 @@ pub struct State {
 }
 
 impl State {
-    pub fn new(max_value_size: usize, capacity: usize) -> Self {
+    pub fn new(max_value_size: usize) -> Self {
         Self {
-            store_lock: Arc::new(RwLock::new(Store::new(max_value_size, capacity))),
+            store_lock: Arc::new(RwLock::new(Store::new(max_value_size))),
         }
     }
 }

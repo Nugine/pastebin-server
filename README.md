@@ -59,7 +59,6 @@ Prefix: "PASTEBIN_"
 | MAX_POST_SIZE  | 32768          | byte        | Max length of POST request body                             |
 | MAX_EXPIRATION | 604800         | second      | Max expiration time                                         |
 | CLEAN_DURATION | 5000           | millisecond | GC interval                                                 |
-| INIT_CAPACITY  | 4096           | 1           | Initial allocation capacity                                 |
 | ADDR           | localhost:8088 |             | Binding address                                             |
 | CRYPT_KEY      | magic          |             | Crypto key for short url                                    |
 
