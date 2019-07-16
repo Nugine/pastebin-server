@@ -1,5 +1,5 @@
-use crate::store::time::SecTime;
-use crate::util::lru_hash_map::LruValueSize;
+use crate::store::time::{NanoTime, SecTime};
+use crate::store::{LruValueSize, WithDeadTime};
 
 #[derive(Debug)]
 pub struct Record {
@@ -8,6 +8,7 @@ pub struct Record {
     pub content: String,
     pub saving_time: SecTime,
     pub expiration: SecTime,
+    pub dead_time: NanoTime,
 }
 
 impl LruValueSize for Record {
@@ -16,5 +17,12 @@ impl LruValueSize for Record {
             + self.title.as_bytes().len()
             + self.lang.as_bytes().len()
             + self.content.as_bytes().len()
+    }
+}
+
+impl WithDeadTime for Record {
+    #[inline]
+    fn dead_time(&self) -> NanoTime {
+        self.dead_time
     }
 }

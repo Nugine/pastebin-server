@@ -24,12 +24,13 @@ pub fn save_record(state: web::Data<State>, dto: web::Json<SaveRecordReq>) -> Re
         content: dto.0.content,
         saving_time,
         expiration: dto.0.expiration,
+        dead_time,
     };
 
     // write store
     // assert: store_lock.write never returns Err or paincs
     let mut store = state.store_lock.write().unwrap();
-    store.save(now, record, dead_time);
+    store.save(now, record);
 
     let store_size = store.total_value_size();
     let key = nano_to_key(now);

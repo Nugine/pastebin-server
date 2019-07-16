@@ -1,6 +1,5 @@
 use crate::data::record::Record;
-use crate::store::store;
-use crate::store::time::NanoTime;
+use crate::store::{self, time::NanoTime};
 
 use std::sync::{Arc, RwLock};
 
