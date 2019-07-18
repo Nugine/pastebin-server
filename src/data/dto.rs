@@ -2,7 +2,7 @@ use crate::time::SecTime;
 
 use serde::{Deserialize, Serialize};
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Serialize)]
 pub struct SaveRecordReq {
     pub title: String,
     pub lang: String,
@@ -49,6 +49,7 @@ define_err_res!(bad_key, 1001, "Can not parse key");
 define_err_res!(record_not_found, 1002, "Can not find record");
 define_err_res!(too_long_expiration, 1003, "Too long expiration");
 define_err_res!(too_long_content, 1004, "Too long content");
+define_err_res!(redis_error, 1005, "Redis error");
 
 #[cfg(test)]
 #[test]

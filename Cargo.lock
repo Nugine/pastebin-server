@@ -962,7 +962,7 @@ dependencies = [
 
 [[package]]
 name = "pastebin-server"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "actix-web 1.0.3 (registry+https://github.com/rust-lang/crates.io-index)",
  "dotenv 0.14.1 (registry+https://github.com/rust-lang/crates.io-index)",

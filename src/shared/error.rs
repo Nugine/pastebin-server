@@ -38,4 +38,11 @@ impl<'a> HandlerError<'a> {
             err_res,
         }
     }
+
+    pub fn internal_server_error(err_res: ErrRes<'a>) -> Self {
+        Self {
+            status_code: StatusCode::INTERNAL_SERVER_ERROR,
+            err_res,
+        }
+    }
 }

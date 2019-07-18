@@ -4,15 +4,16 @@ mod store;
 
 pub use store::{LruValueSize, WithDeadTime};
 
-use self::handler::{find_record_resource, save_record_resource};
+use self::handler::{find_record, save_record};
 use self::state::{State, Store, StoreLock};
 use crate::env::{ADDR, CLEAN_DURATION, MAX_STORE_SIZE};
+use crate::shared::resource::{json_post_config, FIND_RECORD_ROUTE, SAVE_RECORD_ROUTE};
 use crate::time::{now_nano, NanoTime};
 
 use std::thread;
 use std::time::Duration;
 
-use actix_web::{App, HttpServer};
+use actix_web::{web, App, HttpServer};
 
 fn gc(store: &mut Store, now: NanoTime) {
     let before_size = store.total_value_size();
@@ -58,8 +59,12 @@ pub fn run_server() -> std::io::Result<()> {
     HttpServer::new(move || {
         App::new()
             .data(state.clone())
-            .service(find_record_resource())
-            .service(save_record_resource())
+            .service(web::resource(FIND_RECORD_ROUTE).route(web::get().to(find_record)))
+            .service(
+                web::resource(SAVE_RECORD_ROUTE)
+                    .route(web::post().to(save_record))
+                    .data(json_post_config()),
+            )
     })
     .workers(1)
     .bind(&*ADDR)?

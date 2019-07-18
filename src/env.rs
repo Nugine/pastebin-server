@@ -35,7 +35,7 @@ lazy_static! {
     pub static ref ADDR: String = { env::var("PASTEBIN_ADDR").unwrap_or(DEFAULT_ADDR.into()) };
     pub static ref CRYPT_KEY: String =
         { env::var("PASTEBIN_CRYPT_KEY").unwrap_or(DEFAULT_CRYPT_KEY.into()) };
-    pub static ref REDIS_URL: Option<String> = { env::var("REDIS_URL").ok() };
+    pub static ref REDIS_URL: Option<String> = { env::var("PASTEBIN_REDIS_URL").ok() };
 }
 
 pub fn info_env() {
