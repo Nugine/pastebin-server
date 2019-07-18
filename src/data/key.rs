@@ -1,5 +1,5 @@
 use crate::env::CRYPT_KEY;
-use crate::store::time::NanoTime;
+use crate::time::NanoTime;
 
 use short_crypt::ShortCrypt;
 
@@ -34,7 +34,7 @@ pub fn key_to_nano(key: &str) -> Option<NanoTime> {
 #[cfg(test)]
 #[test]
 fn test_key_nano() {
-    use crate::store::time::now_nano;
+    use crate::time::now_nano;
     for _ in 0..3 {
         let nano = now_nano();
         let key = nano_to_key(nano);

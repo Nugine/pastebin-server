@@ -1,5 +1,5 @@
-use crate::store::time::{NanoTime, SecTime};
-use crate::store::{LruValueSize, WithDeadTime};
+use crate::mem_store::{LruValueSize, WithDeadTime};
+use crate::time::{NanoTime, SecTime};
 
 #[derive(Debug)]
 pub struct Record {

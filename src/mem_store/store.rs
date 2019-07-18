@@ -1,4 +1,4 @@
-use super::time::{sec_to_nano, NanoTime};
+use crate::time::{sec_to_nano, NanoTime};
 
 use std::cmp::Eq;
 use std::collections::btree_map::{BTreeMap, Entry};

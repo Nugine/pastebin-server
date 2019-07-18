@@ -1,14 +1,12 @@
-mod error;
 mod find_record;
 mod save_record;
-mod state;
 
 use self::find_record::find_record;
 use self::save_record::save_record;
-pub use state::{State, Store, StoreLock};
 
 use crate::data::dto::{ErrRes, SaveRecordReq};
 use crate::env::MAX_POST_SIZE;
+use crate::shared::error::HandlerError;
 
 use actix_web::http::StatusCode;
 use actix_web::{web, FromRequest, Resource, ResponseError};
@@ -24,7 +22,7 @@ pub fn save_record_resource() -> Resource {
             cfg.error_handler(|err, _| {
                 actix_web::error::InternalError::from_response(
                     err,
-                    self::error::HandlerError {
+                    HandlerError {
                         status_code: StatusCode::BAD_REQUEST,
                         err_res: ErrRes::too_long_content(),
                     }

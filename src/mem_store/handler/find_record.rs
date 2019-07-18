@@ -1,7 +1,7 @@
-use super::error::HandlerError;
-use super::state::State;
+use super::super::state::State;
 use crate::data::dto::{ErrRes, FindRecordRes};
 use crate::data::key::key_to_nano;
+use crate::shared::error::HandlerError;
 
 use actix_web::{web, HttpRequest, HttpResponse, Result};
 

@@ -9,8 +9,10 @@
 //! ADDR: "localhost:8088"
 //!
 //! CRYPT_KEY: "magic"
+//!
+//! REDIS_URL: None
 
-use crate::store::time::SecTime;
+use crate::time::SecTime;
 
 use std::env;
 use std::str::FromStr;
@@ -33,13 +35,21 @@ lazy_static! {
     pub static ref ADDR: String = { env::var("PASTEBIN_ADDR").unwrap_or(DEFAULT_ADDR.into()) };
     pub static ref CRYPT_KEY: String =
         { env::var("PASTEBIN_CRYPT_KEY").unwrap_or(DEFAULT_CRYPT_KEY.into()) };
+    pub static ref REDIS_URL: Option<String> = { env::var("REDIS_URL").ok() };
 }
 
 pub fn info_env() {
-    info!("MAX_STORE_SIZE: {} bytes", *MAX_STORE_SIZE);
-    info!("MAX_POST_SIZE: {} bytes", *MAX_POST_SIZE);
-    info!("MAX_EXPIRATION: {} s", *MAX_EXPIRATION);
-    info!("CLEAN_DURATION: {} ms", *CLEAN_DURATION);
     info!("ADDR: {}", *ADDR);
+    info!("MAX_POST_SIZE: {} bytes", *MAX_POST_SIZE);
     // info!("CRYPT_KEY: {}", *CRYPT_KEY);
+    match *REDIS_URL {
+        Some(ref redis_url) => {
+            info!("REDIS_URL: {}", redis_url);
+        }
+        None => {
+            info!("MAX_STORE_SIZE: {} bytes", *MAX_STORE_SIZE);
+            info!("MAX_EXPIRATION: {} s", *MAX_EXPIRATION);
+            info!("CLEAN_DURATION: {} ms", *CLEAN_DURATION);
+        }
+    }
 }

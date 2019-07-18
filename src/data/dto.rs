@@ -1,4 +1,4 @@
-use crate::store::time::SecTime;
+use crate::time::SecTime;
 
 use serde::{Deserialize, Serialize};
 
